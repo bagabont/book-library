@@ -1,29 +1,52 @@
 ﻿@model IEnumerable<BookLibrary.Models.Book>
-
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Index";
 }
+<h2>Index</h2>
+<p>
+    @using (Html.BeginForm("Index", "Books", FormMethod.Get))
+    {
+    <p>
+        Genre: @Html.DropDownList("bookCategory", "All")
+        Title: @Html.TextBox("SearchString")
+        <input type="submit" value="Filter" />
+    </p>
+    }
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Isbn)
+            </th>
+            <th></th>
+        </tr>
 
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(m => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => item.Category.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => item.Author.FirstName) @Html.DisplayFor(m => item.Author.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => item.Isbn)
+                </td>
 
-@foreach (var item in Model)
-{
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Category)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Price)
-        </td>
-        <th>
-            @Html.DisplayFor(modelItem => item.Isbn)
-        </th>
-        @*<td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id = item.ID })  |
-            @Html.ActionLink("Delete", "Delete", new { id = item.ID })
-        </td>*@
-    </tr>
-}
+                <td>
+                    @Html.ActionLink("Check IN", "CheckIn", new { id = item.Id }) |
+                    @Html.ActionLink("Check OUT", "CheckOut", new { id = item.Id })
+                </td>
+            </tr>
+        }
+    </table>

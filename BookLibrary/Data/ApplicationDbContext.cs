@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿using BookLibrary.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 
-namespace BookLibrary.Models
+namespace BookLibrary.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {

@@ -178,19 +178,19 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\BooksController.cs" />
+    <Compile Include="Data\LibraryInitializer.cs" />
+    <Compile Include="Data\LibraryContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\ApplicationUser.cs" />
+    <Compile Include="Models\Author.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
     <Compile Include="Models\Book.cs" />
-    <Compile Include="Models\BookDbContext.cs" />
     <Compile Include="Models\ForgotViewModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
-    <Compile Include="Models\TransationDbContext.cs" />
-    <Compile Include="Models\CategoryDbContext.cs" />
     <Compile Include="Models\Category.cs" />
-    <Compile Include="Models\ApplicationDbContext.cs" />
+    <Compile Include="Data\ApplicationDbContext.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Transaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
