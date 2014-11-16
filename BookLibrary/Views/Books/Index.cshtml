@@ -47,8 +47,14 @@
                 </td>
 
                 <td>
-                    @Html.ActionLink("Check IN", "CheckIn", new { id = item.Id }) |
-                    @Html.ActionLink("Check OUT", "CheckOut", new { id = item.Id })
+                    @if (item.IsAvailable)
+                    {
+                        @Ajax.ActionLink("Check IN", "CheckIn", new { id = item.Id }, new AjaxOptions { HttpMethod = "POST" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Check OUT", "CheckOut", new { id = item.Id })
+                    }
                 </td>
             </tr>
         }

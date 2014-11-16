@@ -33,13 +33,13 @@ namespace BookLibrary.Data
 
             var books = new List<Book>
             {
-                new Book{Title= "Harry Potter", Isbn= "978-3-16-148410-0"},
-                new Book{Title= "Little Mermaid", Isbn= "978-3-16-148410-1"},
-                new Book{Title= "Random World", Isbn= "978-3-16-148410-2"},
-                new Book{Title= "Natural Juice", Isbn= "978-3-16-148410-3"},
-                new Book{Title= "Animal Planet", Isbn= "978-3-16-148410-4"},
-                new Book{Title= "Space Rangers", Isbn= "978-3-16-148410-5"},
-                new Book{Title= "Big Bad Raccoon", Isbn= "978-3-16-148410-6"}
+                new Book{Title= "Harry Potter", Isbn= "978-3-16-148410-0", IsAvailable = true},
+                new Book{Title= "Little Mermaid", Isbn= "978-3-16-148410-1", IsAvailable = true},
+                new Book{Title= "Random World", Isbn= "978-3-16-148410-2", IsAvailable = true},
+                new Book{Title= "Natural Juice", Isbn= "978-3-16-148410-3", IsAvailable = true},
+                new Book{Title= "Animal Planet", Isbn= "978-3-16-148410-4", IsAvailable = true},
+                new Book{Title= "Space Rangers", Isbn= "978-3-16-148410-5", IsAvailable = true},
+                new Book{Title= "Big Bad Raccoon", Isbn= "978-3-16-148410-6", IsAvailable = true}
             };
             books.ForEach(b => b.Author = authors[_rnd.Next(0, authors.Count - 1)]);
             books.ForEach(b => b.Category = categories[_rnd.Next(0, categories.Count - 1)]);

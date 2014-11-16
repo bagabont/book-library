@@ -1,9 +1,10 @@
 ﻿using BookLibrary.Models;
 using System.Data.Entity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace BookLibrary.Data
 {
-    public class LibraryContext : DbContext
+    public class LibraryContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Book> Books { get; set; }
 
@@ -16,6 +17,11 @@ namespace BookLibrary.Data
         public LibraryContext()
             : base("DefaultConnection")
         {
+        }
+
+        public static LibraryContext Create()
+        {
+            return new LibraryContext();
         }
     }
 }
