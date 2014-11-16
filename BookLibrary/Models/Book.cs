@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace BookLibrary.Models
 {
@@ -17,6 +18,7 @@ namespace BookLibrary.Models
         public virtual Author Author { get; set; }
 
         [Required]
+        [DisplayName("ISBN")]
         public string Isbn { get; set; }
     }
 }

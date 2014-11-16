@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BookLibrary.Models
 {
@@ -8,7 +7,6 @@ namespace BookLibrary.Models
         [Required]
         public int Id { get; set; }
 
-        [DisplayName("Category")]
         [Required]
         public string Name { get; set; }
     }
