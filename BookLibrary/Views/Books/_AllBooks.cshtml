@@ -1,0 +1,32 @@
+﻿@model IEnumerable<BookLibrary.Models.Book>
+
+@foreach (var book in Model)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(m => book.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(m => book.Category.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(m => book.Author.FirstName) @Html.DisplayFor(m => book.Author.LastName)
+        </td>
+        <td>
+            @Html.DisplayFor(m => book.Isbn)
+        </td>
+        <td>
+            @if (book.Owner == null)
+            {
+                @Ajax.ActionLink("Check IN", "CheckIn", new { id = book.Id }, new AjaxOptions { HttpMethod = "POST" })
+            }
+            else
+            {
+                if (book.Owner.UserName == User.Identity.Name)
+                {
+                    @Ajax.ActionLink("Check OUT", "CheckOut", new { id = book.Id }, new AjaxOptions { HttpMethod = "POST" })
+                }
+            }
+        </td>
+    </tr>
+}

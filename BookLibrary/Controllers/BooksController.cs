@@ -1,11 +1,10 @@
-﻿using System.Data.Entity;
-using System.Net;
-using BookLibrary.Data;
+﻿using BookLibrary.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using BookLibrary.Models;
+using Microsoft.AspNet.Identity;
 
 namespace BookLibrary.Controllers
 {
@@ -14,6 +13,7 @@ namespace BookLibrary.Controllers
         private readonly LibraryContext _db = new LibraryContext();
 
         // GET: /Books/
+        [Authorize]
         public ActionResult Index(string bookCategory, string searchString)
         {
             var categories = new List<string>();
@@ -41,46 +41,51 @@ namespace BookLibrary.Controllers
             return View(books);
         }
 
+        [HttpPost]
+        [Authorize]
         public ActionResult CheckIn(int id)
         {
-            var book = _db.Books.FirstOrDefault(b => b.Id == id && b.IsAvailable);
+            var book = _db.Books.FirstOrDefault(b => b.Id == id && b.Owner == null);
             if (book == null)
             {
                 throw new NotImplementedException();
             }
-
-            book.IsAvailable = false;
-            _db.SaveChanges();
+            var currentUser = _db.Users.Find(User.Identity.GetUserId());
+            book.Owner = currentUser;
 
             var transaction = new Transaction
             {
                 Book = book,
                 Date = DateTime.Now,
-                Type = TransactionType.CheckIn
+                Type = TransactionType.CheckIn,
+                User = book.Owner
             };
+
             _db.Transactions.Add(transaction);
             _db.SaveChanges();
 
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        [Authorize]
         public ActionResult CheckOut(int id)
         {
-            var book = _db.Books.FirstOrDefault(b => b.Id == id && !b.IsAvailable);
+            var book = _db.Books.FirstOrDefault(b => b.Id == id && b.Owner != null);
             if (book == null)
             {
                 throw new NotImplementedException();
             }
 
-            book.IsAvailable = true;
-            _db.SaveChanges();
-
             var transaction = new Transaction
-            {
-                Book = book,
-                Date = DateTime.Now,
-                Type = TransactionType.CheckOut
-            };
+             {
+                 Book = book,
+                 Date = DateTime.Now,
+                 Type = TransactionType.CheckOut,
+                 User = book.Owner
+             };
+
+            book.Owner = null;
             _db.Transactions.Add(transaction);
             _db.SaveChanges();
 

@@ -15,6 +15,6 @@ namespace BookLibrary.Models
         [DisplayName("ISBN")]
         public string Isbn { get; set; }
 
-        public bool IsAvailable { get; set; }
+        public virtual ApplicationUser Owner { get; set; }
     }
 }
