@@ -181,10 +181,16 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\BookTransationDbContext.cs" />
-    <Compile Include="Models\BookViewModels.cs" />
-    <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\ApplicationUser.cs" />
+    <Compile Include="Models\RegisterViewModel.cs" />
+    <Compile Include="Models\Book.cs" />
+    <Compile Include="Models\BookDbContext.cs" />
+    <Compile Include="Models\ForgotViewModel.cs" />
+    <Compile Include="Models\LoginViewModel.cs" />
+    <Compile Include="Models\TransationDbContext.cs" />
+    <Compile Include="Models\CategoryDbContext.cs" />
+    <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Transaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
