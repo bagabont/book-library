@@ -10,6 +10,7 @@ namespace BookLibrary.Models
         [Key]
         public int Id { get; set; }
 
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 1)]
         public string Title { get; set; }
 
         public virtual Category Category { get; set; }

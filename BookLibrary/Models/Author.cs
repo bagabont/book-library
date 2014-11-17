@@ -11,9 +11,11 @@ namespace BookLibrary.Models
         public int Id { get; set; }
 
         [DisplayName("First Name")]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 2)]
         public string FirstName { get; set; }
 
         [DisplayName("Last Name")]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 2)]
         public string LastName { get; set; }
     }
 }
