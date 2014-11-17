@@ -17,17 +17,23 @@
         <p>
             Books Library gives you the power to read your favourite books everywhere at any time online. Navigate to our online book shelves and see what would you like to read.
         </p>
-        <p><a class="btn btn-default" href="#">Learn more &raquo;</a></p>
+        <p>
+            @Html.ActionLink("Learn more »", "Index", "Books", null, new { @class = "btn btn-default" })
+        </p>
     </div>
     <div class="col-md-4">
         <h2>Browse your collections</h2>
         <p>See all books that you have borrowed</p>
-        <p><a class="btn btn-default" href="#">Learn more &raquo;</a></p>
+        <p>
+            @Html.ActionLink("Learn more »", "Borrowed", "Books", null, new { @class = "btn btn-default" })
+        </p>
     </div>
     <div class="col-md-4">
         <h2>Available books</h2>
         <p>Our collections are hot, so hurry up and borrow your book!</p>
-        <p><a class="btn btn-default" href="#">Learn more &raquo;</a></p>
+        <p>
+            @Html.ActionLink("Learn more »", "Available", "Books", null, new { @class = "btn btn-default" })
+        </p>
     </div>
 
     <div>
