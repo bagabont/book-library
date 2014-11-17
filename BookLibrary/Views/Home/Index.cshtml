@@ -1,4 +1,7 @@
-﻿@{
+﻿@using BookLibrary.Models
+@model IEnumerable<Transaction>
+
+@{
     ViewBag.Title = "Home";
 }
 
@@ -24,5 +27,28 @@
         <h2>My Books</h2>
         <p>See a complete list of the books you have currently borrowed.</p>
         <p><a class="btn btn-default" href="#">Learn more &raquo;</a></p>
+    </div>
+
+    <div class="col-md-1">
+        <table class="table">
+            <tr>
+                <th>Type</th>
+                <th>Date</th>
+                <th>Book</th>
+                <th>User</th>
+            </tr>
+            @foreach (var transation in Model)
+            {
+                var badgeClass = transation.Type == TransactionType.CheckIn
+                    ? "label-success"
+                    : "label-info";
+                <tr>
+                    <td><span class="label @badgeClass">@transation.Type</span></td>
+                    <td>@transation.Date</td>
+                    <td>@transation.Book.Title</td>
+                    <td>@transation.User.UserName</td>
+                </tr>
+            }
+        </table>
     </div>
 </div>

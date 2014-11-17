@@ -1,12 +1,18 @@
-﻿using System.Web.Mvc;
+﻿using BookLibrary.Data;
+using System.Data.Entity;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace BookLibrary.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        private readonly LibraryContext _db = new LibraryContext();
+
+        public async Task<ActionResult> Index()
         {
-            return View();
+            var transactions = await _db.Transactions.ToListAsync();
+            return View(transactions);
         }
     }
 }
