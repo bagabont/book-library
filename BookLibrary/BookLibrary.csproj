@@ -180,6 +180,7 @@
     <Compile Include="Controllers\BooksController.cs" />
     <Compile Include="Data\LibraryInitializer.cs" />
     <Compile Include="Data\LibraryContext.cs" />
+    <Compile Include="Extensions\EnumEx.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

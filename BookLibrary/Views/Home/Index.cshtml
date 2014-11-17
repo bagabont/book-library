@@ -1,4 +1,5 @@
-﻿@using BookLibrary.Models
+﻿@using BookLibrary.Extensions
+@using BookLibrary.Models
 @model IEnumerable<Transaction>
 
 @{
@@ -12,41 +13,44 @@
 
 <div class="row">
     <div class="col-md-4">
-        <h2>Getting started</h2>
+        <h2>Search all books</h2>
         <p>
-            Books Library gives you the power to read your favourite books everywhere at any time online.
+            Books Library gives you the power to read your favourite books everywhere at any time online. Navigate to our online book shelves and see what would you like to read.
         </p>
         <p><a class="btn btn-default" href="#">Learn more &raquo;</a></p>
     </div>
     <div class="col-md-4">
-        <h2>Check all books</h2>
-        <p>Navigate to our online book shelves and see what would you like to read.</p>
+        <h2>Browse your collections</h2>
+        <p>See all books that you have borrowed</p>
         <p><a class="btn btn-default" href="#">Learn more &raquo;</a></p>
     </div>
     <div class="col-md-4">
-        <h2>My Books</h2>
-        <p>See a complete list of the books you have currently borrowed.</p>
+        <h2>Available books</h2>
+        <p>Our collections are hot, so hurry up and borrow your book!</p>
         <p><a class="btn btn-default" href="#">Learn more &raquo;</a></p>
     </div>
-
-    <table class="table table-striped">
-        <tr>
-            <th>Type</th>
-            <th>Date</th>
-            <th>Book</th>
-            <th>User</th>
-        </tr>
-        @foreach (var transation in Model)
-        {
-            var badgeClass = transation.Type == TransactionType.CheckIn
-                ? "label-success"
-                : "label-info";
+    
+    <div>
+        <table class="table table-striped">
+            <caption class="text-left"><h3>Transactions History</h3></caption> 
             <tr>
-                <td><span class="label @badgeClass">@transation.Type</span></td>
-                <td>@transation.Date</td>
-                <td>@transation.Book.Title</td>
-                <td>@transation.User.UserName</td>
+                <th>Type</th>
+                <th>Date</th>
+                <th>Book</th>
+                <th>User</th>
             </tr>
-        }
-    </table>
+            @foreach (var transation in Model)
+            {
+                var badgeClass = transation.Type == TransactionType.CheckIn
+                    ? "label-success"
+                    : "label-info";
+                <tr>
+                    <td><span class="label @badgeClass">@transation.Type.DisplayName()</span></td>
+                    <td>@transation.Date</td>
+                    <td>@transation.Book.Title</td>
+                    <td>@transation.User.UserName</td>
+                </tr>
+            }
+        </table>
+    </div>
 </div>

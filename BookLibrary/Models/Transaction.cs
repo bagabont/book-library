@@ -1,11 +1,15 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 
 namespace BookLibrary.Models
 {
     public enum TransactionType
     {
+        [Display(Name = "Check IN")]
         CheckIn,
+
+        [Display(Name = "Check OUT")]
         CheckOut
     }
 
