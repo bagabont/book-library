@@ -1,18 +1,11 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 
 namespace BookLibrary.Models
 {
-    public enum TransactionType
-    {
-        [Display(Name = "Check IN")]
-        CheckIn,
-
-        [Display(Name = "Check OUT")]
-        CheckOut
-    }
-
+    /// <summary>
+    /// Represents a transaction entity.
+    /// </summary>
     public class Transaction
     {
         [HiddenInput(DisplayValue = false)]

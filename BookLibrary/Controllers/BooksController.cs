@@ -9,6 +9,9 @@ using System.Web.Mvc;
 
 namespace BookLibrary.Controllers
 {
+    /// <summary>
+    /// Controller for books.
+    /// </summary>
     public class BooksController : Controller
     {
         private readonly LibraryContext _db = new LibraryContext();
@@ -18,11 +21,15 @@ namespace BookLibrary.Controllers
         [OutputCacheAttribute(VaryByParam = "*", Duration = 0, NoStore = true)]
         public async Task<ActionResult> Index(string bookCategory, string searchString)
         {
+            // select all books from the DB
             var allBooks = _db.Books;
+
+            // get categories of all books
             var categoryQuery = from b in allBooks
                                 orderby b.Category.Name
                                 select b.Category.Name;
 
+            // select distinct categories
             var categories = await categoryQuery.Distinct().ToListAsync();
             ViewBag.bookCategory = new SelectList(categories);
 
@@ -31,11 +38,12 @@ namespace BookLibrary.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                books = books.Where(s => s.Title.Contains(searchString));
+                books = Filter(books, searchString);
             }
 
             if (!string.IsNullOrEmpty(bookCategory))
             {
+                // filter books by category
                 books = books.Where(x => x.Category.Name == bookCategory);
             }
             ViewBag.Title = "All Books";
@@ -46,7 +54,10 @@ namespace BookLibrary.Controllers
         [Authorize]
         public async Task<ActionResult> Available(string bookCategory, string searchString)
         {
+            // Find all books which have no owner.
             var availableBooks = _db.Books.Where(b => b.Owner == null);
+
+            // get categories of all available books
             var categoryQuery = from b in availableBooks
                                 orderby b.Category.Name
                                 select b.Category.Name;
@@ -59,7 +70,7 @@ namespace BookLibrary.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                books = books.Where(s => s.Title.Contains(searchString));
+                books = Filter(books, searchString);
             }
 
             if (!string.IsNullOrEmpty(bookCategory))
@@ -74,22 +85,25 @@ namespace BookLibrary.Controllers
         [Authorize]
         public async Task<ActionResult> Borrowed(string bookCategory, string searchString)
         {
+            // get the current user
             var currentUser = _db.Users.Find(User.Identity.GetUserId());
-            var availableBooks = _db.Books.Where(b => b.Owner.UserName == currentUser.UserName);
 
-            var categoryQuery = from b in availableBooks
+            // select all books borrowed by the current user
+            var borrowedBooks = _db.Books.Where(b => b.Owner.UserName == currentUser.UserName);
+
+            var categoryQuery = from b in borrowedBooks
                                 orderby b.Category.Name
                                 select b.Category.Name;
-
+            // select all categories of borrowed books
             var categories = await categoryQuery.Distinct().ToListAsync();
             ViewBag.bookCategory = new SelectList(categories);
 
-            var books = from b in availableBooks
+            var books = from b in borrowedBooks
                         select b;
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                books = books.Where(s => s.Title.Contains(searchString));
+                books = Filter(books, searchString);
             }
 
             if (!string.IsNullOrEmpty(bookCategory))
@@ -99,7 +113,6 @@ namespace BookLibrary.Controllers
             ViewBag.Title = "My Books";
             return View("Index", books);
         }
-
 
         // GET: /Books/Create/
         [HttpGet]
@@ -123,6 +136,7 @@ namespace BookLibrary.Controllers
         {
             if (!ModelState.IsValid)
             {
+                // Invalid data, simply return to index view.
                 return View("Index");
             }
             var authorId = ModelState["Author.Id"].Value.ConvertTo(typeof(int));
@@ -141,7 +155,8 @@ namespace BookLibrary.Controllers
             var book = _db.Books.FirstOrDefault(b => b.Id == id && b.Owner == null);
             if (book == null)
             {
-                throw new NotImplementedException();
+                // Invalid data, simply return to index view.
+                return View("Index");
             }
             var currentUser = _db.Users.Find(User.Identity.GetUserId());
             book.Owner = currentUser;
@@ -169,9 +184,11 @@ namespace BookLibrary.Controllers
             var book = _db.Books.FirstOrDefault(b => b.Id == id && b.Owner != null);
             if (book == null)
             {
-                throw new NotImplementedException();
+                // Invalid data, simply return to index view.
+                return View("Index");
             }
 
+            // log transaction to history
             var transaction = new Transaction
              {
                  Book = book,
@@ -179,12 +196,28 @@ namespace BookLibrary.Controllers
                  Type = TransactionType.CheckOut,
                  User = book.Owner
              };
-
-            book.Owner = null;
             _db.Transactions.Add(transaction);
+
+            // release book for further borrowing
+            book.Owner = null;
             await _db.SaveChangesAsync();
 
             return RedirectToAction("Borrowed");
         }
+
+        /// <summary>
+        /// Filter books by title, ISBN, author's first and last name
+        /// </summary>
+        /// <param name="books">Books collection</param>
+        /// <param name="searchString">Filter</param>
+        /// <returns></returns>
+        private static IQueryable<Book> Filter(IQueryable<Book> books, string searchString)
+        {
+            return books.Where(s => s.Title.Contains(searchString) ||
+                   s.Isbn.Contains(searchString) ||
+                   s.Author.FirstName.Contains(searchString) ||
+                   s.Author.LastName.Contains(searchString));
+        }
+
     }
 }

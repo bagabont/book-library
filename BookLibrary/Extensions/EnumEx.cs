@@ -5,6 +5,11 @@ namespace BookLibrary.Extensions
 {
     public static class EnumEx
     {
+        /// <summary>
+        /// Gets the <see cref="DisplayName"/> attribute of the enum value.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static string DisplayName(this Enum value)
         {
             var enumType = value.GetType();

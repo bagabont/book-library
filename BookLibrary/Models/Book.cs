@@ -4,6 +4,9 @@ using System.Web.Mvc;
 
 namespace BookLibrary.Models
 {
+    /// <summary>
+    /// Represents a book entity
+    /// </summary>
     public class Book
     {
         [HiddenInput(DisplayValue = false)]
@@ -16,6 +19,7 @@ namespace BookLibrary.Models
         [Required]
         public virtual Category Category { get; set; }
 
+        [Required]
         public virtual Author Author { get; set; }
 
         [Required]

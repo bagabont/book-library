@@ -4,6 +4,9 @@ using System.Web.Mvc;
 
 namespace BookLibrary.Models
 {
+    /// <summary>
+    /// Represents a category entity.
+    /// </summary>
     public class Category
     {
         [HiddenInput(DisplayValue = false)]

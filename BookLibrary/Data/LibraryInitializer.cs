@@ -5,6 +5,9 @@ using System.Data.Entity;
 
 namespace BookLibrary.Data
 {
+    /// <summary>
+    /// Populates the database with dummy data.
+    /// </summary>
     public class LibraryInitializer : DropCreateDatabaseIfModelChanges<LibraryContext>
     {
         private readonly Random _rnd = new Random();

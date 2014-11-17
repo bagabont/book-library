@@ -4,6 +4,9 @@ using System.Web.Mvc;
 
 namespace BookLibrary.Models
 {
+    /// <summary>
+    /// Represents an Author entity.
+    /// </summary>
     public class Author
     {
         [HiddenInput(DisplayValue = false)]
@@ -17,6 +20,9 @@ namespace BookLibrary.Models
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 2)]
         public string LastName { get; set; }
 
+        /// <summary>
+        /// Gets the full name of the author.
+        /// </summary>
         public string FullName
         {
             get { return FirstName + " " + LastName; }
