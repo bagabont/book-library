@@ -1,4 +1,6 @@
-﻿using BookLibrary.Data;
+﻿using System.Data.Entity;
+using System.Threading.Tasks;
+using BookLibrary.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,15 +16,13 @@ namespace BookLibrary.Controllers
 
         // GET: /Books/
         [Authorize]
-        public ActionResult Index(string bookCategory, string searchString)
+        public async Task<ActionResult> Index(string bookCategory, string searchString)
         {
-            var categories = new List<string>();
-
             var categoryQuery = from d in _db.Books
                                 orderby d.Category.Name
                                 select d.Category.Name;
 
-            categories.AddRange(categoryQuery.Distinct());
+            var categories = await categoryQuery.Distinct().ToListAsync();
             ViewBag.bookCategory = new SelectList(categories);
 
             var books = from m in _db.Books
@@ -43,7 +43,7 @@ namespace BookLibrary.Controllers
 
         [HttpPost]
         [Authorize]
-        public ActionResult CheckIn(int id)
+        public async Task<ActionResult> CheckIn(int? id)
         {
             var book = _db.Books.FirstOrDefault(b => b.Id == id && b.Owner == null);
             if (book == null)
@@ -62,14 +62,14 @@ namespace BookLibrary.Controllers
             };
 
             _db.Transactions.Add(transaction);
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
 
             return RedirectToAction("Index");
         }
 
         [HttpPost]
         [Authorize]
-        public ActionResult CheckOut(int id)
+        public async Task<ActionResult> CheckOut(int id)
         {
             var book = _db.Books.FirstOrDefault(b => b.Id == id && b.Owner != null);
             if (book == null)
@@ -87,7 +87,7 @@ namespace BookLibrary.Controllers
 
             book.Owner = null;
             _db.Transactions.Add(transaction);
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
 
             return RedirectToAction("Index");
         }
