@@ -13,7 +13,6 @@ namespace BookLibrary.Models
     public class Transaction
     {
         [HiddenInput(DisplayValue = false)]
-        [Key]
         public int Id { get; set; }
 
         public virtual Book Book { get; set; }

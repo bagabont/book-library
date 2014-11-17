@@ -7,7 +7,6 @@ namespace BookLibrary.Models
     public class Author
     {
         [HiddenInput(DisplayValue = false)]
-        [Key]
         public int Id { get; set; }
 
         [DisplayName("First Name")]
@@ -17,5 +16,10 @@ namespace BookLibrary.Models
         [DisplayName("Last Name")]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 2)]
         public string LastName { get; set; }
+
+        public string FullName
+        {
+            get { return FirstName + " " + LastName; }
+        }
     }
 }

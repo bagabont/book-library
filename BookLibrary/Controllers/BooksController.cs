@@ -43,8 +43,10 @@ namespace BookLibrary.Controllers
         // GET: /Books/Create/
         [HttpGet]
         [Authorize]
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
+            var authors = await _db.Authors.ToListAsync();
+            ViewBag.authorsList = new SelectList(authors, "Id", "FullName");
             return View();
         }
 
