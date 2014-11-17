@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using BookLibrary.Data;
+﻿using BookLibrary.Data;
 using BookLibrary.Models;
 using Microsoft.AspNet.Identity;
 using System;
