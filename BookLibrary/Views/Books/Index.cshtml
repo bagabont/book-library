@@ -1,9 +1,12 @@
 ﻿@model IEnumerable<BookLibrary.Models.Book>
-
 @{
     ViewBag.Title = "Index";
 }
+
 <h2>All Books</h2>
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
 @using (Html.BeginForm("Index", "Books", FormMethod.Get))
 {
     <p>

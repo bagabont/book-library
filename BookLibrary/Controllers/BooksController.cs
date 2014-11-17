@@ -1,12 +1,11 @@
-﻿using System.Data.Entity;
-using System.Threading.Tasks;
-using BookLibrary.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
+﻿using BookLibrary.Data;
 using BookLibrary.Models;
 using Microsoft.AspNet.Identity;
+using System;
+using System.Data.Entity;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace BookLibrary.Controllers
 {
@@ -41,8 +40,33 @@ namespace BookLibrary.Controllers
             return View(books);
         }
 
+        // GET: /Books/Create/
+        [HttpGet]
+        [Authorize]
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: /Books/Create/
         [HttpPost]
         [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create([Bind(Include = "Title,Category,Author,Isbn,Rating")] Book book)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Index");
+            }
+            _db.Books.Add(book);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
+        // POST: /Books/CheckIn/5
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> CheckIn(int? id)
         {
             var book = _db.Books.FirstOrDefault(b => b.Id == id && b.Owner == null);
@@ -67,8 +91,10 @@ namespace BookLibrary.Controllers
             return RedirectToAction("Index");
         }
 
+        // POST: /Books/CheckOut/5
         [HttpPost]
         [Authorize]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> CheckOut(int id)
         {
             var book = _db.Books.FirstOrDefault(b => b.Id == id && b.Owner != null);
