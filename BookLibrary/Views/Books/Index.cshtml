@@ -1,9 +1,6 @@
 ﻿@model IEnumerable<BookLibrary.Models.Book>
-@{
-    ViewBag.Title = "Index";
-}
 
-<h2>All Books</h2>
+<h2>@ViewBag.Title</h2>
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
@@ -31,5 +28,5 @@
         </th>
         <th></th>
     </tr>
-    @Html.Partial("_AllBooks")
+    @Html.Partial("_BooksList")
 </table>

@@ -15,17 +15,19 @@ namespace BookLibrary.Controllers
 
         // GET: /Books/
         [Authorize]
+        [OutputCacheAttribute(VaryByParam = "*", Duration = 0, NoStore = true)]
         public async Task<ActionResult> Index(string bookCategory, string searchString)
         {
-            var categoryQuery = from d in _db.Books
-                                orderby d.Category.Name
-                                select d.Category.Name;
+            var allBooks = _db.Books;
+            var categoryQuery = from b in allBooks
+                                orderby b.Category.Name
+                                select b.Category.Name;
 
             var categories = await categoryQuery.Distinct().ToListAsync();
             ViewBag.bookCategory = new SelectList(categories);
 
-            var books = from m in _db.Books
-                        select m;
+            var books = from b in allBooks
+                        select b;
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -36,9 +38,69 @@ namespace BookLibrary.Controllers
             {
                 books = books.Where(x => x.Category.Name == bookCategory);
             }
-
+            ViewBag.Title = "All Books";
             return View(books);
         }
+
+        // GET: /Books/Available
+        [Authorize]
+        public async Task<ActionResult> Available(string bookCategory, string searchString)
+        {
+            var availableBooks = _db.Books.Where(b => b.Owner == null);
+            var categoryQuery = from b in availableBooks
+                                orderby b.Category.Name
+                                select b.Category.Name;
+
+            var categories = await categoryQuery.Distinct().ToListAsync();
+            ViewBag.bookCategory = new SelectList(categories);
+
+            var books = from b in availableBooks
+                        select b;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                books = books.Where(s => s.Title.Contains(searchString));
+            }
+
+            if (!string.IsNullOrEmpty(bookCategory))
+            {
+                books = books.Where(x => x.Category.Name == bookCategory);
+            }
+            ViewBag.Title = "Available Books";
+            return View("Index", books);
+        }
+
+
+        // GET: /Books/Available
+        [Authorize]
+        public async Task<ActionResult> MyBooks(string bookCategory, string searchString)
+        {
+            var currentUser = _db.Users.Find(User.Identity.GetUserId());
+            var availableBooks = _db.Books.Where(b => b.Owner.UserName == currentUser.UserName);
+
+            var categoryQuery = from b in availableBooks
+                                orderby b.Category.Name
+                                select b.Category.Name;
+
+            var categories = await categoryQuery.Distinct().ToListAsync();
+            ViewBag.bookCategory = new SelectList(categories);
+
+            var books = from b in availableBooks
+                        select b;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                books = books.Where(s => s.Title.Contains(searchString));
+            }
+
+            if (!string.IsNullOrEmpty(bookCategory))
+            {
+                books = books.Where(x => x.Category.Name == bookCategory);
+            }
+            ViewBag.Title = "My Books";
+            return View("Index", books);
+        }
+
 
         // GET: /Books/Create/
         [HttpGet]
@@ -90,7 +152,7 @@ namespace BookLibrary.Controllers
             _db.Transactions.Add(transaction);
             await _db.SaveChangesAsync();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("MyBooks");
         }
 
         // POST: /Books/CheckOut/5
@@ -117,7 +179,7 @@ namespace BookLibrary.Controllers
             _db.Transactions.Add(transaction);
             await _db.SaveChangesAsync();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("MyBooks");
         }
     }
 }
