@@ -1,4 +1,5 @@
-﻿using BookLibrary.Data;
+﻿using System.Diagnostics;
+using BookLibrary.Data;
 using BookLibrary.Models;
 using Microsoft.AspNet.Identity;
 using System;
@@ -107,7 +108,11 @@ namespace BookLibrary.Controllers
         public async Task<ActionResult> Create()
         {
             var authors = await _db.Authors.ToListAsync();
-            ViewBag.authorsList = new SelectList(authors, "Id", "FullName");
+            ViewBag.AuthorsList = authors.Select(a => new SelectListItem
+            {
+                Value = a.Id.ToString(),
+                Text = a.FirstName + " " + a.LastName
+            });
             return View();
         }
 
@@ -121,6 +126,8 @@ namespace BookLibrary.Controllers
             {
                 return View("Index");
             }
+            var authorId = ModelState["Author.Id"].Value.ConvertTo(typeof(int));
+            book.Author = _db.Authors.Find(authorId);
             _db.Books.Add(book);
             await _db.SaveChangesAsync();
             return RedirectToAction("Index");
