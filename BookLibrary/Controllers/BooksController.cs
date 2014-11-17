@@ -70,10 +70,9 @@ namespace BookLibrary.Controllers
             return View("Index", books);
         }
 
-
-        // GET: /Books/Available
+        // GET: /Books/Borrowed
         [Authorize]
-        public async Task<ActionResult> MyBooks(string bookCategory, string searchString)
+        public async Task<ActionResult> Borrowed(string bookCategory, string searchString)
         {
             var currentUser = _db.Users.Find(User.Identity.GetUserId());
             var availableBooks = _db.Books.Where(b => b.Owner.UserName == currentUser.UserName);
@@ -152,7 +151,7 @@ namespace BookLibrary.Controllers
             _db.Transactions.Add(transaction);
             await _db.SaveChangesAsync();
 
-            return RedirectToAction("MyBooks");
+            return RedirectToAction("Borrowed");
         }
 
         // POST: /Books/CheckOut/5
@@ -179,7 +178,7 @@ namespace BookLibrary.Controllers
             _db.Transactions.Add(transaction);
             await _db.SaveChangesAsync();
 
-            return RedirectToAction("MyBooks");
+            return RedirectToAction("Borrowed");
         }
     }
 }
